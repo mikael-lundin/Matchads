@@ -1,0 +1,294 @@
+﻿
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
+
+	<title>Recs</title>
+
+	<style type="text/css" media="all">
+		@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,900');
+
+		*, *:after, *:before { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; margin: 0; padding: 0; border: 0; outline: 0;}
+		html, body { font-family: 'Roboto', sans-serif; font-size: 16px; }
+		iframe {display:block; width: 300px; height: 250px;}
+		#widgetElement { overflow: hidden;}
+		#wrapper {
+			overflow: hidden;
+	        min-width: 100%;
+	        width: 100%;
+		}
+
+		.template { display: none; }
+
+
+		a, a:visited, a:hover {
+			text-decoration: none;
+			font-family: inherit;
+			color: #1E1E1E;
+			font-weight: bold;
+		}
+
+		h1{
+			font-size: 16px;
+			color: #686868;
+			line-height: 115%;
+			text-transform: uppercase;
+		}
+
+		.item {
+			padding: 5px;
+			float:left;
+			width: 300px;
+			height: 250px;
+			position: relative;
+			display: block;
+			overflow:hidden;
+		}
+
+		.item-title {
+			padding: 5px 5px 0px;
+			line-height: 115%;
+			height: 100px;
+			font-family: 'Roboto', 'Arial', sans-serif;
+		}
+		
+		.item-image{
+			padding-bottom: 50%;
+			background-repeat: no-repeat;
+			background-position: 50% 50%;
+			background-size: cover;
+		}
+
+		.advertisement{
+		    padding: 1px 4px;
+			position: absolute;
+			top: 10px; right: 10px;
+			font-size: 10px;
+			text-transform: uppercase;
+			background-color: #fff;
+		}
+
+/*		@media screen and (max-width: 670px) {
+		    .item-title {font-size: 14px; font-weight: normal; line-height: 18px;} 
+		}
+*/
+		@media screen and (max-width: 450px) {
+		    .item-title{ height: auto; margin-bottom: 20px;}
+		}
+
+
+	 </style>
+
+</head>
+
+
+<body>
+
+	<h1 id="header">Recommended</h1>
+	<div id="widgetElement">
+
+	<div id="wrapper">
+		<div id="targetElement">
+			<div id="resultsTemplate" class="template">
+			<!--%
+				var adId = 0;
+				var recsId = 0;
+				for (var i = 0; i < itemAmount; i++) {
+
+					var isAd = null;
+					var target = "_top";
+					var trackingImageSrc = null;
+					var ads = adData.adUnits[0].ads;
+					var thirdParty = false;
+					
+
+					if (adpositions.indexOf(String(i+1)) != -1 && ads[adId]) {
+						if(ads[adId].text.thirdParty){
+							thirdParty = true;
+							var thirdPartyCode = ads[adId].html;
+						}else {
+							var item = ads[adId];
+							var title = item.text.title.content;
+							
+							var imageSrc = item.assets.image.cdnId;
+							var clickUrl = item.destinationUrl;
+						}
+						var isAd = true;
+						var renderedAd = adId;
+						adId ++;
+					}else{
+
+						var item = recsData.response.items[recsId];
+						var title = item['og-title'] || item.title || "No title";
+						var imageSrc = item.dominantimage;
+						var clickUrl = item.click_url;
+						recsId ++;
+
+					}
+					
+					if(thirdParty == true){ %-->
+						<div class="item">
+							<iframe src="" id="item-{{renderedAd}}" scrolling="no"></iframe>
+						</div>
+					<!--% }else{
+
+					%-->
+
+
+					<div class="item">
+						<a tmp:target="{{target}}" tmp:id="{{cX.clickTracker(clickUrl)}}" tmp:href="{{clickUrl}}">
+						<div tmp:style="background-image: url({{imageSrc}})" tmp:class="item-image"></div>
+						<div class="item-title">
+							<!--% if (isAd) {  %-->	<div class="advertisement">Annons</div> <!--% } %-->
+							{{title}}
+						</div>
+						<!--% if (trackingImageSrc) { %--><img tmp:src="{{trackingImageSrc}}" border="0" width="1" height="1" alt="" /><!--% } %-->
+						</a>
+					</div>
+					
+					<!--% } %-->
+				<!--% } %-->
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<script type="text/javascript" src="https://scdn.cxense.com/cx.js"></script>
+
+	<script>
+		(function(d, s, e, t) { e = d.createElement(s); e.type = 'text/java' + s; e.async = 'async';
+		e.src = 'http' + ('https:' === location.protocol ? 's' : '') + '://cdn.adnuntius.com/adn.js';
+		t = d.getElementsByTagName(s)[0]; t.parentNode.insertBefore(e, t); })(document, 'script');
+		window.adn = window.adn || {};
+	</script>
+
+	<script type="text/javascript">
+
+		var context = cX.library.parseHashArgs();
+		var recsData;
+		var adData;
+		var adpositions;
+		var currentPage = 0;
+		var maxPages;
+
+
+
+		var setStyle = function(){
+			var header = document.getElementById('header');
+			var rowClicker = 0;
+
+			header.innerHTML = context.header;
+			if(context.headerPadding) header.style.padding = context.headerPadding;
+			if(context.headerColor) header.style.color = context.headerColor;
+			if(context.headerFont) header.style.font = context.headerFont;
+			
+			var elements = document.getElementsByClassName("item");
+			for (var i = 0; i < elements.length; i++) {
+				if( context.width == '100%' ){
+					elements[i].style.width = (100/context.numberPerRow) +'%';
+					elements[i].style.height = 'auto';
+				}else{
+					if(context.margin) elements[i].style.marginRight = context.margin +'px';
+					rowClicker ++;
+					if(rowClicker == context.numberPerRow ){
+						rowClicker = 0;
+						if(context.margin) elements[i].style.marginRight = '0px';
+					}
+				}
+			}
+
+
+			var ad_marks = document.getElementsByClassName("advertisement");
+			for (var i = 0; i < ad_marks.length; i++) {
+				if(context.adBgColor) ad_marks[i].style.background = context.adBgColor ;
+				if(context.adTextColor) ad_marks[i].style.color = context.adTextColor ;
+				if(context.adInTextPosition) {
+					ad_marks[i].style.position = 'inherit' ;
+					ad_marks[i].style.padding = '1px 4px' ;
+					ad_marks[i].style.width = '50px' ;
+					ad_marks[i].style.margin = '0 0 5px -5px' ;
+
+
+				}
+
+			}
+
+		}
+
+
+
+		var listeners = {
+			onSuccess: function(data) {
+				adData = data.responseJSON;
+				adpositions = context.positions.split(',');
+				itemAmount= context.amount;
+				cX.library.renderTemplate('resultsTemplate', 'targetElement');
+				setStyle();
+				sendParentResizeMessage(context);
+				var ads = adData.adUnits[0].ads;
+				for (var i = 0; i < ads.length; i++) {
+					if(ads[i].text.thirdParty){
+						var doc = document.getElementById('item-'+i).contentWindow.document;
+						doc.open();
+						doc.write('<style>body{margin:0;padding:0}</style>'+ads[i].html);
+						doc.close();
+					}
+				}
+			}
+		};
+		
+
+		function sendParentResizeMessage(context) {
+
+
+			var height = document.getElementById('widgetElement').offsetHeight;
+			var message = 'method=updateAdSpace'
+				+ '&contentHeight=' + height
+				+ '&elementId=' + encodeURIComponent(context.parentElementId);
+			window.parent.postMessage(message, '*');
+
+		}
+
+
+
+
+		function renderWidget(data) {
+			recsData = data;
+			var auId = context.adId;
+			adn.calls = adn.calls || [];
+				adn.calls.push(function() {
+				adn.requestData({
+					// env: 'staging',
+					auId: auId,
+					auW: 300, auH: 250,
+					onSuccess: listeners.onSuccess
+				});
+			});
+		}
+
+
+		window.onresize = function(event) {
+			if(context.width == "100%") {
+				var elements = document.getElementsByClassName("item");
+				for (var i = 0; i < elements.length; i++) {
+
+					if( window.innerWidth > 670 ) elements[i].style.width = (100/context.numberPerRow) +'%';
+					if( window.innerWidth < 670 ) elements[i].style.width = '50%';
+					if( window.innerWidth < 450 ) elements[i].style.width = '100%';
+				}
+			}
+    		sendParentResizeMessage(context);
+		}
+
+
+		cX.library.insertWidget({
+			widgetId: context.cxWidgetId,
+			renderFunction: renderWidget
+		});
+	</script>
+
+</body>
+</html>
