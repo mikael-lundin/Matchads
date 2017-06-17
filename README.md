@@ -1,7 +1,7 @@
 # Matchads - Render template
 Basic render template setup
 
-```javascript
+```html
 <div id="cx_demo" style="display: none"></div>
 <script type="text/javascript">
 
