@@ -62,7 +62,7 @@ The items in 'insertWidget' are bound to these values.
 | positions					| ['1,3,5']						| Optional		| Array			| Array to tell where to put the ads in widget. (one based index)
 
 
-#Good to know
+# Good to know
 Programmatic
 Responsive mode do not render programmatic ads well, move to pixel sized widget for that. When pixel dimensions are selected item size will be defaulted to 300x250 (Medium sized rectangle)
 
